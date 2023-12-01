@@ -76,3 +76,22 @@ export async function getQuestionByTagId(params: GetQuestionsByTagIdParams) {
     throw error;
   }
 }
+
+export async function getTopPopularTags() {
+  try {
+    connectToDatabase();
+
+    // aggregate func basically to return computed result
+    const popularTags = await Tag.aggregate([
+      // { name: 1 } - include the name field of each document in the output of the $project stage
+      { $project: { name: 1, numberOfQuestions: { $size: "$questions" } } },
+      { $sort: { numberOfQuestions: -1 } },
+      { $limit: 5 },
+    ]);
+
+    return popularTags;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
