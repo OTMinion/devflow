@@ -22,28 +22,30 @@ import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "@/context/ThemeProvider";
 
+// All the questionDetails has to be ? because only in edit mode that there is question detail
 interface Props {
-  mongoUserId: string;
   type?: string;
+  mongoUserId: string;
   questionDetails?: string;
 }
 
-const Question = ({ mongoUserId, type, questionDetails }: Props) => {
+const Question = ({ type, mongoUserId, questionDetails }: Props) => {
+  const { mode } = useTheme();
   const editorRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
-  const parsedQuestionDetails = JSON.parse(questionDetails || "");
+  const parsedQuestionDetails = questionDetails && JSON.parse(questionDetails || "");
 
-  const groupedTags = parsedQuestionDetails.tags.map((tag) => tag.name);
+  const groupedTags = parsedQuestionDetails?.tags.map((tag) => tag.name);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof QuestionsSchema>>({
     resolver: zodResolver(QuestionsSchema),
     defaultValues: {
-      title: parsedQuestionDetails.title || "",
-      explanation: parsedQuestionDetails.content || "",
+      title: parsedQuestionDetails?.title || "",
+      explanation: parsedQuestionDetails?.content || "",
       tags: groupedTags || [],
     },
   });
@@ -71,7 +73,6 @@ const Question = ({ mongoUserId, type, questionDetails }: Props) => {
           path: pathname,
         });
 
-        // navigate to home page
         router.push("/");
       }
     } catch (error) {
@@ -111,8 +112,6 @@ const Question = ({ mongoUserId, type, questionDetails }: Props) => {
 
     form.setValue("tags", newTags);
   };
-
-  const { mode } = useTheme();
 
   return (
     <Form {...form}>
@@ -155,7 +154,7 @@ const Question = ({ mongoUserId, type, questionDetails }: Props) => {
                   }}
                   onBlur={field.onBlur}
                   onEditorChange={(content) => field.onChange(content)}
-                  initialValue={parsedQuestionDetails.content || ""}
+                  initialValue={parsedQuestionDetails?.content || ""}
                   init={{
                     height: 350,
                     menubar: false,
@@ -219,7 +218,7 @@ const Question = ({ mongoUserId, type, questionDetails }: Props) => {
                           onClick={() => (type !== "Edit" ? handleTagRemove(tag, field) : () => {})}
                         >
                           {tag}
-                          {type === "create" && (
+                          {type !== "Edit" && (
                             <Image
                               src="/assets/icons/close.svg"
                               alt="Close icon"
