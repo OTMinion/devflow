@@ -8,14 +8,14 @@ import { SearchParamsProps } from "@/types";
 
 import { auth } from "@clerk/nextjs";
 
-export default async function Home({ params, searchParams }: SearchParamsProps) {
+export default async function Home({ searchParams }: SearchParamsProps) {
   const { userId } = auth();
 
   if (!userId) return null;
   const result = await getSavedQuestions({
     clerkId: userId,
-
     searchQuery: searchParams.q,
+    filter: searchParams.filter,
   });
 
   return (

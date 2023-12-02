@@ -85,7 +85,13 @@ const Page = async ({ params, searchParams }) => {
         ))}
       </div>
 
-      <AllAnswers questionId={result._id} userId={mongoUser._id} totalAnswers={result.answers.length} />
+      <AllAnswers
+        questionId={result._id}
+        userId={mongoUser._id}
+        totalAnswers={result.answers.length}
+        page={searchParams?.page}
+        filter={searchParams?.filter}
+      />
 
       <Answer
         question={result.content}
