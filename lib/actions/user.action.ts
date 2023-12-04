@@ -1,4 +1,5 @@
 "use server";
+
 import { FilterQuery } from "mongoose";
 import User from "@/database/user.model";
 import { connectToDatabase } from "../mongoose";
@@ -98,7 +99,7 @@ export async function getAllUsers(params: GetAllUsersParams) {
   try {
     connectToDatabase();
 
-    const { searchQuery, filter, page = 1, pageSize = 2 } = params;
+    const { searchQuery, filter, page = 1, pageSize = 10 } = params;
     const skipAmount = (page - 1) * pageSize;
 
     const query: FilterQuery<typeof User> = {};
@@ -128,6 +129,7 @@ export async function getAllUsers(params: GetAllUsersParams) {
     }
 
     const users = await User.find(query).sort(sortOptions).skip(skipAmount).limit(pageSize);
+
     const totalUsers = await User.countDocuments(query);
     const isNext = totalUsers > skipAmount + users.length;
 
@@ -153,8 +155,10 @@ export async function toggleSaveQuestion(params: ToggleSaveQuestionParams) {
     const isQuestionSaved = user.saved.includes(questionId);
 
     if (isQuestionSaved) {
+      // remove question from saved
       await User.findByIdAndUpdate(userId, { $pull: { saved: questionId } }, { new: true });
     } else {
+      // add question to saved
       await User.findByIdAndUpdate(userId, { $addToSet: { saved: questionId } }, { new: true });
     }
 
@@ -169,7 +173,8 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
   try {
     connectToDatabase();
 
-    const { clerkId, searchQuery, filter, page = 1, pageSize = 2 } = params;
+    const { clerkId, searchQuery, filter, page = 1, pageSize = 20 } = params;
+
     const skipAmount = (page - 1) * pageSize;
 
     const query: FilterQuery<typeof Question> = searchQuery
@@ -219,7 +224,7 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
       throw new Error("User not found");
     }
 
-    const savedQuestions = isNext ? user.saved.slice(0, -1) : user.saved;
+    const savedQuestions = user.saved;
 
     return { questions: savedQuestions, isNext };
   } catch (error) {
@@ -258,21 +263,22 @@ export async function getUserQuestions(params: GetUserStatsParams) {
   try {
     connectToDatabase();
 
-    const { userId, page = 1, pageSize = 2 } = params;
+    const { userId, page = 1, pageSize = 10 } = params;
 
     const skipAmount = (page - 1) * pageSize;
+
     const totalQuestions = await Question.countDocuments({ author: userId });
 
     const userQuestions = await Question.find({ author: userId })
       .sort({ views: -1, upvotes: -1 })
-      .populate("tags", "_id name")
-      .populate("author", "_id clerkId name picture")
       .skip(skipAmount)
-      .limit(pageSize);
+      .limit(pageSize)
+      .populate("tags", "_id name")
+      .populate("author", "_id clerkId name picture");
 
     const isNextQuestions = totalQuestions > skipAmount + userQuestions.length;
 
-    return { questions: userQuestions, totalQuestions, isNextQuestions };
+    return { totalQuestions, questions: userQuestions, isNextQuestions };
   } catch (error) {
     console.log(error);
     throw error;
@@ -283,21 +289,22 @@ export async function getUserAnswers(params: GetUserStatsParams) {
   try {
     connectToDatabase();
 
-    const { userId, page = 1, pageSize = 2 } = params;
-    const totalAnswers = await Answer.countDocuments({ author: userId });
+    const { userId, page = 1, pageSize = 10 } = params;
 
     const skipAmount = (page - 1) * pageSize;
 
+    const totalAnswers = await Answer.countDocuments({ author: userId });
+
     const userAnswers = await Answer.find({ author: userId })
       .sort({ upvotes: -1 })
-      .populate("question", "_id title")
-      .populate("author", "_id clerkId name picture")
       .skip(skipAmount)
-      .limit(pageSize);
+      .limit(pageSize)
+      .populate("question", "_id title")
+      .populate("author", "_id clerkId name picture");
 
-    const isNextAnswers = totalAnswers > skipAmount + userAnswers.length;
+    const isNextAnswer = totalAnswers > skipAmount + userAnswers.length;
 
-    return { answers: userAnswers, totalAnswers, isNextAnswers };
+    return { totalAnswers, answers: userAnswers, isNextAnswer };
   } catch (error) {
     console.log(error);
     throw error;
