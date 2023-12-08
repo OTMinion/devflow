@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import { Badge } from "../ui/badge";
 import RenderTag from "../shared/RenderTag";
+import Link from "next/link";
 
 interface Props {
   user: {
@@ -18,7 +19,7 @@ const UserCard = async ({ user }: Props) => {
   const interactedTags = await getTopInteractedTags({ userId: user._id });
 
   return (
-    <div
+    <Link
       href={`/profile/${user.clerkId}`}
       className="shadow-light100_darknone w-full max-xs:min-w-full xs:w-[260px]"
     >
@@ -48,7 +49,7 @@ const UserCard = async ({ user }: Props) => {
           )}
         </div>
       </article>
-    </div>
+    </Link>
   );
 };
 

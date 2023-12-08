@@ -152,7 +152,6 @@ const Profile = ({ clerkId, user }: Props) => {
               </FormLabel>
               <FormControl>
                 <Textarea
-                  type="url"
                   placeholder="What's your specialty"
                   {...field}
                   className="no-focus paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700 min-h-[56px] border"
