@@ -15,6 +15,16 @@ import { auth } from "@clerk/nextjs";
 export const metadata: Metadata = {
   title: "Home",
   description: "home sweet home",
+
+  openGraph: {
+    images: [
+      {
+        url: "https://flic.kr/p/2ooBes5",
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
 };
 
 export default async function Home({ searchParams }: SearchParamsProps) {
