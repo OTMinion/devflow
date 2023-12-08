@@ -60,13 +60,13 @@ const Profile = ({ clerkId, user }: Props) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mt-9 flex w-full gap-9 flex-col">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="mt-9 flex w-full flex-col gap-9">
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem className="space-y-3.5">
-              <FormLabel>
+              <FormLabel className="paragraph-semibold text-dark400_light800">
                 Name <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl>
@@ -87,7 +87,7 @@ const Profile = ({ clerkId, user }: Props) => {
           name="username"
           render={({ field }) => (
             <FormItem className="space-y-3.5">
-              <FormLabel>
+              <FormLabel className="paragraph-semibold text-dark400_light800">
                 UserName <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl>
@@ -108,7 +108,7 @@ const Profile = ({ clerkId, user }: Props) => {
           name="portfolioWebsite"
           render={({ field }) => (
             <FormItem className="space-y-3.5">
-              <FormLabel>Portfolio</FormLabel>
+              <FormLabel className="paragraph-semibold text-dark400_light800">Portfolio</FormLabel>
               <FormControl>
                 <Input
                   type="url"
@@ -128,7 +128,7 @@ const Profile = ({ clerkId, user }: Props) => {
           name="location"
           render={({ field }) => (
             <FormItem className="space-y-3.5">
-              <FormLabel>Location</FormLabel>
+              <FormLabel className="paragraph-semibold text-dark400_light800">Location</FormLabel>
               <FormControl>
                 <Input
                   placeholder="Your Location"
@@ -147,7 +147,7 @@ const Profile = ({ clerkId, user }: Props) => {
           name="bio"
           render={({ field }) => (
             <FormItem className="space-y-3.5">
-              <FormLabel>
+              <FormLabel className="paragraph-semibold text-dark400_light800">
                 Bio <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl>
