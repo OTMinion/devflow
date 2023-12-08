@@ -15,6 +15,11 @@ import { auth } from "@clerk/nextjs";
 export const metadata: Metadata = {
   title: "Home",
   description: "home sweet home",
+  openGraph: {
+    images: [
+      "https://www.google.com/imgres?imgurl=https%3A%2F%2Fmedia.licdn.com%2Fdms%2Fimage%2FC4D03AQESkvPDg8KyjA%2Fprofile-displayphoto-shrink_800_800%2F0%2F1629367954640%3Fe%3D2147483647%26v%3Dbeta%26t%3DgiPUgkBHJj661jEG6UhUsbr3ZMpLvdKpRd9r9zoVaj0&tbnid=JfP95pyIFUJQ3M&vet=12ahUKEwjR-cqP7_-CAxVwmScCHRqwCbgQMygTegQIARBh..i&imgrefurl=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fangela-white-2345061a3&docid=gsO1QL25WIvTsM&w=800&h=800&q=angela%20white&ved=2ahUKEwjR-cqP7_-CAxVwmScCHRqwCbgQMygTegQIARBh",
+    ],
+  },
 };
 
 export default async function Home({ searchParams }: SearchParamsProps) {
