@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     images: [
       {
-        url: "https://live.staticflickr.com/65535/52868732707_a672f0d824_b.jpg",
+        url: "https://live.staticflickr.com/65535/53384228353_33996576e3_b.jpg",
         width: 1200, // Adjust if necessary
         height: 630, // Adjust if necessary
       },
