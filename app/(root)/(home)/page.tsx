@@ -15,13 +15,12 @@ import { auth } from "@clerk/nextjs";
 export const metadata: Metadata = {
   title: "Home",
   description: "home sweet home",
-
   openGraph: {
     images: [
       {
-        url: "https://flic.kr/p/2ooBes5",
-        width: 1200,
-        height: 630,
+        url: "https://live.staticflickr.com/65535/53383778451_019d0d8cca_c.jpg",
+        width: 1200, // Adjust if necessary
+        height: 630, // Adjust if necessary
       },
     ],
   },
